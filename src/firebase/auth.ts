@@ -7,8 +7,14 @@ import {
   createUserWithEmailAndPassword,
   updateProfile
 } from 'firebase/auth'
+import { uploadProfilePicture } from './storage'
+import { addUser } from './firestore'
 
 const auth = getAuth(app)
+
+export const onAuthStateChanged = (callback: (user: any) => void) => {
+  return auth.onAuthStateChanged(callback)
+}
 
 // Google Sign In
 const googleProvider = new GoogleAuthProvider()
@@ -21,21 +27,39 @@ export const registerWithEmailAndPasswordHandler = (
   email: string,
   password: string,
   displayName: string,
-  photoUrl: string
+  profilePicture: File | null
 ) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       const user = userCredential.user
-      await updateProfile(user, {
-        displayName: displayName,
-        photoURL: photoUrl
-      })
+
+      let photoUrl = undefined
+      if (profilePicture) {
+        // Await the upload of the profile picture, because we need the url to update the profile
+        await uploadProfilePicture(profilePicture, user.uid)
+          .then((url) => {
+            photoUrl = url
+          })
+          .catch((error) => {
+            console.log('error handled here', error)
+          })
+      }
+
+      await Promise.all([
+        updateProfile(user, {
+          displayName: displayName,
+          photoURL: photoUrl
+        }),
+        addUser(user.uid, displayName, photoUrl)
+      ])
 
       return { user, error: null }
     })
     .catch((error) => {
       const errorCode = error.code
       const errorMessage = error.message
+
+      console.log("Error occurred in register", errorCode, errorMessage)
 
       return { user: null, error: { errorCode: errorCode, errorMessage: errorMessage } }
     })

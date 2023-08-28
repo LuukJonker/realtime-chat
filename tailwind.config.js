@@ -7,7 +7,7 @@ export default {
     extend: {
       colors: {
         surface: {
-          PRIMARY: "#181818",
+          DEFAULT: "#181818",
           100: "#1F1F1F",
           200: "#242424",
           300: "#2A2A2A",
