@@ -25,7 +25,6 @@ const comp = computed(() => {
 })
 
 const message = computed(() => {
-  console.log('Computing', props.chat, props.chat.messages?.at(0)?.content)
   return props.chat.messages?.at(0)
 })
 </script>

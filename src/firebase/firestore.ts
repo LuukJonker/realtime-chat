@@ -17,6 +17,7 @@ import type { Chat, Message, User } from '@/types/database'
 import { useChatsStore } from '@/stores/chats'
 
 const db = getFirestore(app)
+const { subscribe } = useChatsStore()
 
 export type UpdateUserParams = {
   displayName?: string
@@ -82,11 +83,9 @@ export const startChat = async (participants: string[]) => {
     createdAt: new Date()
   })
 
-  const { subscribe } = useChatsStore()
-
-  console.log('subscribing to chat', doc.id)
+  // Subscribe to the new chat after it's created in the backend.
+  // Otherwise, permissions will be denied.
   subscribe(doc.id)
-  console.log('subscribed to chat', doc.id)
 
   return doc.id
 }
@@ -123,7 +122,10 @@ export const subscribeOnUsers = (callback: (users: User[]) => void) => {
   return unsubscribe
 }
 
-export const subscribeOnChats = (callback: (chats: Chat[]) => void) => {
+type Source = 'local' | 'server'
+type ChatCallbackParams = { chats: Chat[]; source: Source }
+
+export const subscribeOnChats = (callback: (params: ChatCallbackParams) => void) => {
   const currentUser = auth.currentUser
 
   if (!currentUser) {
@@ -133,17 +135,18 @@ export const subscribeOnChats = (callback: (chats: Chat[]) => void) => {
   const coll = collection(db, 'chats')
   const q = query(coll, where('participants', 'array-contains', currentUser.uid))
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const source = querySnapshot.metadata.hasPendingWrites ? 'local' : 'server'
+
     const chats = querySnapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() }
     })
 
-    callback(chats as Chat[])
+    callback({chats: chats as Chat[], source })
   })
 
   return unsubscribe
 }
 
-type Source = 'local' | 'server'
 type MessageCallbackParams = { messages: Message[]; source: Source }
 
 export const subscribeOnMessages = (
@@ -154,7 +157,7 @@ export const subscribeOnMessages = (
   const q = query(coll, orderBy('createdAt', 'desc'))
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    const source = querySnapshot.metadata.fromCache ? 'local' : 'server'
+    const source = querySnapshot.metadata.hasPendingWrites ? 'local' : 'server'
 
     const messages = querySnapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() }
