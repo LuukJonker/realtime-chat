@@ -8,7 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { uploadProfilePicture } from './storage'
-import { updateUser } from './firestore'
+import { createUser, type UpdateUserParams } from './firestore'
 
 const auth = getAuth(app)
 
@@ -48,9 +48,9 @@ export const registerWithEmailAndPasswordHandler = (
       await Promise.all([
         updateProfile(user, {
           displayName: displayName,
-          photoURL,
+          photoURL
         }),
-        updateUser(user.uid, {displayName, photoURL})
+        createUser(user.uid, displayName, photoURL)
       ])
 
       return { user, error: null }

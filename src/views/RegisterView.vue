@@ -76,6 +76,8 @@ const submit = async () => {
           type="file"
           class="p-2 rounded-xl text-onDark focus:outline-none text-lg bg-surface-200"
         />
+        <p class="text-error text-center">{{ displayError }}</p>
+
         <button class="bg-primary rounded-full p-2 text-onLight text-lg">
           <p v-if="loading">Loading...</p>
           <p v-else>Register</p>

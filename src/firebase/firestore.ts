@@ -17,9 +17,18 @@ import type { Chat, Message, User } from '@/types/database'
 
 const db = getFirestore(app)
 
-type UpdateUserParams = {
+export type UpdateUserParams = {
   displayName?: string
   photoURL?: string | null
+}
+
+export const createUser = (uid: string, displayName?: string, photoURL?:string | null) => {
+  const document = doc(db, 'users', uid)
+
+  return setDoc(document, {
+    displayName: displayName ?? "",
+    photoURL: photoURL ?? null,
+  })
 }
 
 export const updateUser = (uid: string, params: UpdateUserParams) => {
@@ -135,7 +144,7 @@ export const subscribeOnMessages = (
   callback: (params: MessageCallbackParams) => void
 ) => {
   const coll = collection(db, 'chats', chatId, 'messages')
-  const q = query(coll, orderBy('createdAt', 'asc'))
+  const q = query(coll, orderBy('createdAt', 'desc'))
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const source = querySnapshot.metadata.fromCache ? 'local' : 'server'

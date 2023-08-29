@@ -14,11 +14,23 @@ const user = auth.currentUser as User
 
 <template>
   <main class="flex h-full">
-    <section class="w-80 bg-surface-100 h-full">
+    <section
+      class="bg-surface-100 h-full"
+      :class="{
+        'w-full md:w-80': !chatId,
+        'hidden md:w-80 md:inline': chatId
+      }"
+    >
       <ProfileSection :user="user" />
 
       <UserSection />
     </section>
-    <ChatMain v-if="chatId" :chatId="chatId" />
+    <ChatMain
+      :chatId="chatId"
+      :class="{
+        'hidden md:flex': !chatId,
+        '': chatId
+      }"
+    />
   </main>
 </template>

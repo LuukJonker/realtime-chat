@@ -2,15 +2,13 @@
 import { sendMessage } from '@/firebase/firestore'
 import { watch, ref } from 'vue'
 import { useInputMessagesStore } from '@/stores/inputMessages'
-import { useChatsStore } from '@/stores/chats'
 
 const props = defineProps<{
-  chatId: string
+  chatId: string,
+  chatScrollToBottom: () => void
 }>()
 
 const { addInputMessage, removeInputMessage, getInputMessage } = useInputMessagesStore()
-
-const { subscribe } = useChatsStore()
 
 const message = ref('')
 
@@ -24,7 +22,6 @@ watch(
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   addInputMessage(props.chatId, target.value)
-  subscribe(props.chatId)
   message.value = target.value
 }
 
@@ -33,6 +30,9 @@ const send = async () => {
   message.value = ''
   removeInputMessage(props.chatId)
   await promise
+
+  // Wait for the message to be added to the chat
+  props.chatScrollToBottom()
 }
 </script>
 
