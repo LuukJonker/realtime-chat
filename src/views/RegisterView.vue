@@ -25,7 +25,7 @@ const submit = async () => {
     return
   }
 
-  const { user, error } = await registerWithEmailAndPasswordHandler(
+  const { error } = await registerWithEmailAndPasswordHandler(
     email.value,
     password.value,
     displayName.value,

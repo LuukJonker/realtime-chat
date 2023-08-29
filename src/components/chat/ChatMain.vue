@@ -3,7 +3,7 @@ import ChatMessage from './ChatMessage.vue'
 import ChatInput from './ChatInput.vue'
 import { useChatsStore } from '@/stores/chats'
 import { storeToRefs } from 'pinia'
-import { computed, watch, ref } from 'vue'
+import { computed, ref } from 'vue'
 import ChatToolbar from './ChatToolbar.vue'
 
 const props = defineProps<{

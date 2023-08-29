@@ -8,7 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { uploadProfilePicture } from './storage'
-import { createUser, type UpdateUserParams } from './firestore'
+import { createUser } from './firestore'
 
 const auth = getAuth(app)
 

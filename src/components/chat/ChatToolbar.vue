@@ -32,7 +32,7 @@ const comp = computed(() => {
   const currentUserId = auth.currentUser?.uid
   const otherUserId = chat.value.participants.find((id) => id !== currentUserId)
 
-  const user = usersStore.users.find((user) => user.id === otherUserId)
+  const user = users.value.find((user) => user.id === otherUserId)
   return user ?? { displayName: '', photoURL: '' }
 })
 

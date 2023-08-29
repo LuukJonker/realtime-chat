@@ -26,7 +26,10 @@ const handleInput = (event: Event) => {
 }
 
 const send = async () => {
-  const promise = sendMessage(props.chatId, message.value)
+  const content = message.value.trim()
+  if (!content) return
+
+  const promise = sendMessage(props.chatId, content)
   message.value = ''
   removeInputMessage(props.chatId)
   await promise
