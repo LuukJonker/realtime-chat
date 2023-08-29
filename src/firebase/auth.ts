@@ -33,12 +33,12 @@ export const registerWithEmailAndPasswordHandler = (
     .then(async (userCredential) => {
       const user = userCredential.user
 
-      let photoUrl = undefined
+      let photoURL = undefined
       if (profilePicture) {
         // Await the upload of the profile picture, because we need the url to update the profile
         await uploadProfilePicture(profilePicture, user.uid)
           .then((url) => {
-            photoUrl = url
+            photoURL = url
           })
           .catch((error) => {
             console.log('error handled here', error)
@@ -48,9 +48,9 @@ export const registerWithEmailAndPasswordHandler = (
       await Promise.all([
         updateProfile(user, {
           displayName: displayName,
-          photoURL: photoUrl
+          photoURL,
         }),
-        updateUser(user.uid, displayName, photoUrl)
+        updateUser(user.uid, {displayName, photoURL})
       ])
 
       return { user, error: null }
