@@ -15,10 +15,10 @@ const user = auth.currentUser as User
 <template>
   <main class="flex h-full">
     <section
-      class="bg-surface-100 h-full"
+      class="bg-surface-100 h-full flex flex-col items-stretch"
       :class="{
         'w-full md:w-80': !chatId,
-        'hidden md:w-80 md:inline': chatId
+        'hidden md:w-80 md:flex': chatId
       }"
     >
       <ProfileSection :user="user" />
