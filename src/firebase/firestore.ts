@@ -17,7 +17,6 @@ import type { Chat, Message, User } from '@/types/database'
 import { useChatsStore } from '@/stores/chats'
 
 const db = getFirestore(app)
-const { subscribe } = useChatsStore()
 
 export type UpdateUserParams = {
   displayName?: string
@@ -75,6 +74,19 @@ export const getUsers = async () => {
 }
 
 export const startChat = async (participants: string[]) => {
+  const { chats, subscribe } = useChatsStore()
+
+  // Check if the chat already exists, only for 1:1 chats.
+  const existingChat = chats.find((chat) => {
+    return !chat.groupchat && chat.participants.every((participant) => {
+      return participants.includes(participant)
+    })
+  })
+
+  if (existingChat) {
+    return existingChat.id
+  }
+
   const coll = collection(db, 'chats')
 
   const doc = await addDoc(coll, {
