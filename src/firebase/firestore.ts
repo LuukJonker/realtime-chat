@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore'
 import auth from './auth'
 import type { Chat, Message, User } from '@/types/database'
+import { useChatsStore } from '@/stores/chats'
 
 const db = getFirestore(app)
 
@@ -80,6 +81,12 @@ export const startChat = async (participants: string[]) => {
     updatedAt: new Date(),
     createdAt: new Date()
   })
+
+  const { subscribe } = useChatsStore()
+
+  console.log('subscribing to chat', doc.id)
+  subscribe(doc.id)
+  console.log('subscribed to chat', doc.id)
 
   return doc.id
 }

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { registerWithEmailAndPasswordHandler } from '@/firebase/auth'
 import router from '@/router'
+import ImageUpload from '@/components/ImageUpload.vue';
 
 const email = ref('')
 const password = ref('')
@@ -13,9 +14,7 @@ const displayError = ref('')
 
 const loading = ref(false)
 
-const onFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file: File | null = (target.files as FileList)[0]
+const setProfilePicture = (file: File | null) => {
   profilePicture.value = file
 }
 
@@ -71,11 +70,7 @@ const submit = async () => {
           placeholder="Confirm Password"
           class="p-2 rounded-xl text-onDark focus:outline-none text-lg bg-surface-200"
         />
-        <input
-          v-on:change="onFileChange"
-          type="file"
-          class="p-2 rounded-xl text-onDark focus:outline-none text-lg bg-surface-200"
-        />
+        <ImageUpload :image="profilePicture" :set-image="setProfilePicture" />
         <p class="text-error text-center">{{ displayError }}</p>
 
         <button class="bg-primary rounded-full p-2 text-onLight text-lg">
