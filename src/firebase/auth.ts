@@ -8,7 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth'
 import { uploadProfilePicture } from './storage'
-import { addUser } from './firestore'
+import { updateUser } from './firestore'
 
 const auth = getAuth(app)
 
@@ -50,7 +50,7 @@ export const registerWithEmailAndPasswordHandler = (
           displayName: displayName,
           photoURL: photoUrl
         }),
-        addUser(user.uid, displayName, photoUrl)
+        updateUser(user.uid, displayName, photoUrl)
       ])
 
       return { user, error: null }
@@ -59,7 +59,7 @@ export const registerWithEmailAndPasswordHandler = (
       const errorCode = error.code
       const errorMessage = error.message
 
-      console.log("Error occurred in register", errorCode, errorMessage)
+      console.log('Error occurred in register', errorCode, errorMessage)
 
       return { user: null, error: { errorCode: errorCode, errorMessage: errorMessage } }
     })

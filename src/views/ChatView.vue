@@ -4,8 +4,6 @@ import type { User } from 'firebase/auth'
 import ProfileSection from '@/components/ProfileSection.vue'
 import UserSection from '@/components/UserSection.vue'
 import ChatMain from '@/components/chat/ChatMain.vue'
-import { storeToRefs } from 'pinia'
-import { useChatsStore } from '@/stores/chats'
 
 defineProps<{
   chatId: string | undefined

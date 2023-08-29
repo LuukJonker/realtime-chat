@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import type { User } from '@/types/database'
 import ProfileIconImage from '@/assets/profile-icon.png'
-import { RouterLink } from 'vue-router'
+import { startChat } from '@/firebase/firestore'
+import auth from '@/firebase/auth'
+import router from '@/router'
 
 const props = defineProps<{
   user: User
 }>()
 
 const user = props.user
+
+const handleClick = async () => {
+  if (!auth.currentUser) return
+  const chatId = await startChat([user.id, auth.currentUser?.uid])
+  router.push(`/${chatId}`)
+}
 </script>
 
 <template>
-  <RouterLink :to="`/${user.id}`" class="flex gap-4 p-4 rounded-lg items-center bg-surface-200">
+  <button @click="handleClick" class="flex gap-4 p-4 rounded-lg items-center bg-surface-200">
     <img
       :src="user.photoURL ? user.photoURL : ProfileIconImage"
       alt="Profile"
@@ -23,5 +31,5 @@ const user = props.user
     <div class="flex flex-col gap-2">
       <h2>{{ user.displayName }}</h2>
     </div>
-  </RouterLink>
+  </button>
 </template>

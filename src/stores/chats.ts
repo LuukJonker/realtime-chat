@@ -9,26 +9,36 @@ export const useChatsStore = defineStore('chats', () => {
 
   const subscribed = new Set<string>()
 
-  subscribeOnChats((c) => {
-    chats.value = c
+  const isSubscribed = (chatId: string) => {
+    return subscribed.has(chatId)
+  }
 
-    c.forEach((chat) => {
-      if (subscribed.has(chat.id)) {
+  const subscribe = (chatId: string) => {
+    if (subscribed.has(chatId)) {
+      return
+    }
+
+    subscribeOnMessages(chatId, ({ messages, source }) => {
+      if (source === 'local') {
         return
       }
 
-      subscribeOnMessages(chat.id, (messages) => {
-        chats.value = chats.value.map((c) => {
-          if (c.id === chat.id) {
-            c.messages = messages
-          }
+      chats.value = chats.value.map((c) => {
+        if (c.id === chatId) {
+          c.messages = messages
+        }
 
-          return c
-        })
+        return c
       })
-
-      subscribed.add(chat.id)
     })
+
+    subscribed.add(chatId)
+  }
+
+  subscribeOnChats((c) => {
+    chats.value = c
+
+    c.forEach((chat) => subscribe(chat.id))
   })
 
   const contacts = computed(() => {
@@ -47,6 +57,8 @@ export const useChatsStore = defineStore('chats', () => {
 
   return {
     chats,
-    contacts
+    contacts,
+    isSubscribed,
+    subscribe
   }
 })

@@ -1,16 +1,37 @@
 <script setup lang="ts">
-import { sendMessage } from '@/firebase/firestore';
-import { ref } from 'vue'
+import { sendMessage } from '@/firebase/firestore'
+import { watch, ref } from 'vue'
+import { useInputMessagesStore } from '@/stores/inputMessages'
+import { useChatsStore } from '@/stores/chats'
 
 const props = defineProps<{
   chatId: string
 }>()
 
+const { addInputMessage, removeInputMessage, getInputMessage } = useInputMessagesStore()
+
+const { subscribe } = useChatsStore()
+
 const message = ref('')
+
+watch(
+  () => props.chatId,
+  () => {
+    message.value = getInputMessage(props.chatId)
+  }
+)
+
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  addInputMessage(props.chatId, target.value)
+  subscribe(props.chatId)
+  message.value = target.value
+}
 
 const send = async () => {
   const promise = sendMessage(props.chatId, message.value)
   message.value = ''
+  removeInputMessage(props.chatId)
   await promise
 }
 </script>
@@ -22,7 +43,8 @@ const send = async () => {
         type="text"
         class="flex-1 p-2 rounded-xl text-onDark focus:outline-none text-lg bg-surface-300"
         placeholder="Type a message..."
-        v-model="message"
+        :value="message"
+        @input="handleInput"
       />
       <button
         type="submit"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { signInWithEmailAndPasswordHandler, signInWithGoogle } from '@/firebase/auth'
-import { addUser } from '@/firebase/firestore'
+import { updateUser } from '@/firebase/firestore'
 import router from '@/router'
 import { RouterLink } from 'vue-router'
 
@@ -20,7 +20,7 @@ const signInWithGoogleHandler = async () => {
   const user = await signInWithGoogle()
 
   if (user) {
-    await addUser(
+    await updateUser(
       user.user.uid,
       user.user.displayName ? user.user.displayName : 'New user',
       user.user.photoURL

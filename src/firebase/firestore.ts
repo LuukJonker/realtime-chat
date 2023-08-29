@@ -6,26 +6,26 @@ import {
   where,
   doc,
   setDoc,
-  getDoc,
   getDocs,
   orderBy,
   limit,
-  serverTimestamp,
-  onSnapshot
+  onSnapshot,
+  addDoc
 } from 'firebase/firestore'
 import auth from './auth'
 import type { Chat, Message, User } from '@/types/database'
-import { v4 as uuidv4 } from 'uuid'
 
 const db = getFirestore(app)
 
-export const addUser = (uid: string, displayName: string, photoURL: string | null | undefined) => {
+type UpdateUserParams = {
+  displayName?: string
+  photoURL?: string | null
+}
+
+export const updateUser = (uid: string, params: UpdateUserParams) => {
   const document = doc(db, 'users', uid)
 
-  return setDoc(document, {
-    displayName: displayName,
-    photoURL: photoURL ? photoURL : null
-  })
+  return setDoc(document, params, { merge: true })
 }
 
 export const getChats = async () => {
@@ -64,21 +64,19 @@ export const getUsers = async () => {
 }
 
 export const startChat = async (participants: string[]) => {
-  const chatId = uuidv4()
-  const document = doc(db, 'chats', chatId)
+  const coll = collection(db, 'chats')
 
-  await setDoc(document, {
+  const doc = await addDoc(coll, {
     participants: participants,
     updatedAt: new Date(),
     createdAt: new Date()
   })
 
-  return chatId
+  return doc.id
 }
 
 export const sendMessage = async (chatId: string, content: string) => {
-  const messageId = uuidv4()
-  const document = doc(db, 'chats', chatId, 'messages', messageId)
+  const coll = collection(db, 'chats', chatId, 'messages')
 
   const currentUser = auth.currentUser
 
@@ -86,25 +84,37 @@ export const sendMessage = async (chatId: string, content: string) => {
     throw new Error('User not found in sendMessage')
   }
 
-  const chat = await setDoc(document, {
+  const chat = await addDoc(coll, {
     chatId: chatId,
     senderId: currentUser.uid,
     content: content,
-    createdAt: new Date(),
+    createdAt: new Date()
   })
 
   return chat
 }
 
-export const subscribeOnChats = (callback: (chats: Chat[]) => void) => {
-  const coll = collection(db, 'chats')
+export const subscribeOnUsers = (callback: (users: User[]) => void) => {
+  const coll = collection(db, 'users')
+  const unsubscribe = onSnapshot(coll, (querySnapshot) => {
+    const users = querySnapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() }
+    })
 
+    callback(users as User[])
+  })
+
+  return unsubscribe
+}
+
+export const subscribeOnChats = (callback: (chats: Chat[]) => void) => {
   const currentUser = auth.currentUser
 
   if (!currentUser) {
     throw new Error('User not found in sendMessage')
   }
 
+  const coll = collection(db, 'chats')
   const q = query(coll, where('participants', 'array-contains', currentUser.uid))
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const chats = querySnapshot.docs.map((doc) => {
@@ -117,16 +127,24 @@ export const subscribeOnChats = (callback: (chats: Chat[]) => void) => {
   return unsubscribe
 }
 
-export const subscribeOnMessages = (chatId: string, callback: (messages: Message[]) => void) => {
+type Source = 'local' | 'server'
+type MessageCallbackParams = { messages: Message[]; source: Source }
+
+export const subscribeOnMessages = (
+  chatId: string,
+  callback: (params: MessageCallbackParams) => void
+) => {
   const coll = collection(db, 'chats', chatId, 'messages')
   const q = query(coll, orderBy('createdAt', 'asc'))
 
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const source = querySnapshot.metadata.fromCache ? 'local' : 'server'
+
     const messages = querySnapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() }
     })
 
-    callback(messages as Message[])
+    callback({ messages: messages as Message[], source })
   })
 
   return unsubscribe
