@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import ContactCard from './ContactCard.vue'
+import ChatCard from './ChatCard.vue'
 import { useChatsStore } from '@/stores/chats'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import sortChats from '@/utils/sortChats'
 
 const chatsStore = useChatsStore()
 const { chats } = storeToRefs(chatsStore)
+
+const sortedChats = computed(() => sortChats(chats.value))
 </script>
 
 <template>
-  <div v-if="chats.length" class="flex-1 flex flex-col gap-2 mx-2 mt-4">
-    <ContactCard v-for="chat in chats" :key="chat.id" :chat="chat" />
+  <div v-if="chats.length" class="flex-1 flex flex-col gap-4 mx-2 mt-4">
+    <ChatCard v-for="chat in sortedChats" :key="chat.id" :chat="chat" />
   </div>
 </template>

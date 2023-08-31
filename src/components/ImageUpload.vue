@@ -16,12 +16,6 @@ const handleInputChange = (event: Event) => {
   const file: File | null = (target.files as FileList)[0]
   props.setImage(file)
 }
-
-const handleDelete = (event: Event) => {
-  event.preventDefault()
-  event.stopPropagation()
-  props.setImage(null)
-}
 </script>
 
 <template>
@@ -47,7 +41,6 @@ const handleDelete = (event: Event) => {
       </p>
     </div>
     <div v-else className="absolute flex flex-col items-center justify-center w-full h-full">
-      <BiImageAdd className="text-6xl" />
       <p className="text-lg">Add Profile Picture</p>
     </div>
 

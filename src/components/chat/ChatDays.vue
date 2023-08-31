@@ -13,7 +13,9 @@ defineProps<{
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center items-center">
-      <p class="text-center text-onDark text-sm bg-surface-300 p-2 rounded-lg">{{ dayWithMessages.day }}</p>
+      <p class="text-center text-onDark text-sm bg-surface-300 p-2 rounded-lg">
+        {{ dayWithMessages.day }}
+      </p>
     </div>
     <div class="flex flex-col-reverse">
       <ChatMessage
