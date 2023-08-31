@@ -32,7 +32,7 @@ const message = computed(() => {
 <template>
   <RouterLink
     :to="`/${chat.id}`"
-    class="flex items-center rounded-lg p-4 gap-4 bg-surface-400 hover:bg-surface-500"
+    class="flex items-center rounded-lg p-2 gap-4 bg-surface-400 hover:bg-surface-500"
     v-if="$props.chat.messages"
   >
     <img
@@ -43,10 +43,18 @@ const message = computed(() => {
       class="w-16 aspect-square rounded-full object-cover"
       referrerpolicy="no-referrer"
     />
-    <div class="flex flex-col gap-[2px]">
+    <div class="flex flex-col gap-[2px] max-w-full w-full">
       <h2 class="text-lg text-onDark">{{ comp.displayName }}</h2>
-      <p v-if="message" class="text-onDark emphasis-high">{{ message.content }}</p>
-      <div v-else class="text-onDark emphasis-high animate-pulse" />
+      <div class="flex w-full max-w-full items-center justify-between">
+        <p v-if="message" class="text-onDark emphasis-high whitespace-nowrap overflow-ellipsis overflow-hidden">
+          {{ message.content }}
+        </p>
+        <div v-else class="text-onDark emphasis-high animate-pulse h-4 w-32" />
+
+        <p class="">
+          Read
+        </p>
+      </div>
     </div>
   </RouterLink>
 </template>

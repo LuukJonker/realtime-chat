@@ -36,14 +36,16 @@ const checkIfFarApart = (index: number) => {
 
 <template>
   <div
-    class="flex flex-col gap-1 p-2 rounded-lg w-80 mt-1"
+    class="flex flex-row-reverse p-2 rounded-lg mt-1 flex-wrap-reverse max-w-[70%]"
     :class="{
-      'self-end items-end bg-primary text-onLight': message.senderId === currentUser?.uid,
+      'self-end items-start bg-primary text-onLight': message.senderId === currentUser?.uid,
       'self-start items-start bg-surface-400 text-onDark': message.senderId !== currentUser?.uid,
       'mt-2': checkIfFarApart(index)
     }"
   >
-    <p>{{ message.content }}</p>
-    <p class="text-xs emphasis-low">{{ formatTime(message.createdAt.toDate()) }}</p>
+    <p class="text-xs emphasis-low justify-self-end ml-2">
+      {{ formatTime(message.createdAt.toDate()) }}
+    </p>
+    <p class="max-w-full break-words">{{ message.content }}</p>
   </div>
 </template>
