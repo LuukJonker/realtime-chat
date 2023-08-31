@@ -23,12 +23,12 @@ export type UpdateUserParams = {
   photoURL?: string | null
 }
 
-export const createUser = (uid: string, displayName?: string, photoURL?:string | null) => {
+export const createUser = (uid: string, displayName?: string, photoURL?: string | null) => {
   const document = doc(db, 'users', uid)
 
   return setDoc(document, {
-    displayName: displayName ?? "",
-    photoURL: photoURL ?? null,
+    displayName: displayName ?? '',
+    photoURL: photoURL ?? null
   })
 }
 
@@ -78,9 +78,12 @@ export const startChat = async (participants: string[]) => {
 
   // Check if the chat already exists, only for 1:1 chats.
   const existingChat = chats.find((chat) => {
-    return !chat.groupchat && chat.participants.every((participant) => {
-      return participants.includes(participant)
-    })
+    return (
+      !chat.groupchat &&
+      chat.participants.every((participant) => {
+        return participants.includes(participant)
+      })
+    )
   })
 
   if (existingChat) {
@@ -153,7 +156,7 @@ export const subscribeOnChats = (callback: (params: ChatCallbackParams) => void)
       return { id: doc.id, ...doc.data() }
     })
 
-    callback({chats: chats as Chat[], source })
+    callback({ chats: chats as Chat[], source })
   })
 
   return unsubscribe

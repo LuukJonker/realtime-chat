@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { registerWithEmailAndPasswordHandler } from '@/firebase/auth'
 import router from '@/router'
-import ImageUpload from '@/components/ImageUpload.vue';
+import ImageUpload from '@/components/ImageUpload.vue'
 
 const email = ref('')
 const password = ref('')

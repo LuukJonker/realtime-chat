@@ -1,4 +1,4 @@
-import type { Timestamp } from "firebase/firestore"
+import type { Timestamp } from 'firebase/firestore'
 
 type UserId = string
 
@@ -28,7 +28,7 @@ type MessageId = string
 export enum MessageState {
   SENT = 0,
   RECEIVED = 1,
-  READ = 2,
+  READ = 2
 }
 
 export type Message = {

@@ -46,14 +46,15 @@ const message = computed(() => {
     <div class="flex flex-col gap-[2px] max-w-full w-full">
       <h2 class="text-lg text-onDark">{{ comp.displayName }}</h2>
       <div class="flex w-full max-w-full items-center justify-between">
-        <p v-if="message" class="text-onDark emphasis-high whitespace-nowrap overflow-ellipsis overflow-hidden">
+        <p
+          v-if="message"
+          class="text-onDark emphasis-high whitespace-nowrap overflow-ellipsis overflow-hidden"
+        >
           {{ message.content }}
         </p>
         <div v-else class="text-onDark emphasis-high animate-pulse h-4 w-32" />
 
-        <p class="">
-          Read
-        </p>
+        <p class="">Read</p>
       </div>
     </div>
   </RouterLink>

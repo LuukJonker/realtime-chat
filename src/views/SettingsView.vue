@@ -31,12 +31,12 @@ const handleUpdate = async () => {
 
   updateUser(user.value.uid, {
     displayName: newDisplayName.value ?? user.value.displayName ?? 'New user',
-    photoURL: url,
+    photoURL: url
   })
 
   await updateProfile(user.value, {
     displayName: newDisplayName.value,
-    photoURL: url,
+    photoURL: url
   })
 
   working.value = false

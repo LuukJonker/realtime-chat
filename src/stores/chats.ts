@@ -31,7 +31,7 @@ export const useChatsStore = defineStore('chats', () => {
     subscribed.add(chatId)
   }
 
-  subscribeOnChats(({chats: c, source: chatSource}) => {
+  subscribeOnChats(({ chats: c, source: chatSource }) => {
     chats.value = c
 
     if (chatSource === 'local') {

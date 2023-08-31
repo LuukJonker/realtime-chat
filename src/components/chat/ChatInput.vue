@@ -4,7 +4,7 @@ import { watch, ref } from 'vue'
 import { useInputMessagesStore } from '@/stores/inputMessages'
 
 const props = defineProps<{
-  chatId: string,
+  chatId: string
   chatScrollToBottom: () => void
 }>()
 

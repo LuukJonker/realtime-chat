@@ -20,7 +20,7 @@ const signInWithGoogleHandler = async () => {
   const user = await signInWithGoogle()
 
   if (user) {
-    await createUser(user.user.uid, user.user.displayName ?? "New user", user.user.photoURL)
+    await createUser(user.user.uid, user.user.displayName ?? 'New user', user.user.photoURL)
     router.push({ path: '/' })
   }
 }
