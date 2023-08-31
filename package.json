@@ -12,7 +12,8 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "format:check": "prettier --check src/"
+    "format:check": "prettier --check src/",
+    "deploy": "npm run build; firebase deploy"
   },
   "dependencies": {
     "firebase": "^10.3.0",

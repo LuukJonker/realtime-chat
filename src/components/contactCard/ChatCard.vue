@@ -54,7 +54,7 @@ const message = computed(() => {
         </p>
         <div v-else class="text-onDark emphasis-high animate-pulse h-4 w-32" />
 
-        <p class="">Read</p>
+        <p class="">R</p>
       </div>
     </div>
   </RouterLink>
