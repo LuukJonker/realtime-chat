@@ -5,6 +5,7 @@ import { computed } from 'vue'
 import { useUsersStore } from '@/stores/users'
 import auth from '@/firebase/auth'
 import { RouterLink } from 'vue-router'
+import { formatChatTime } from '@/utils/formatTime'
 
 const props = defineProps<{
   chat: Chat
@@ -54,7 +55,7 @@ const message = computed(() => {
         </p>
         <div v-else class="text-onDark emphasis-high animate-pulse h-4 w-32" />
 
-        <p class="">R</p>
+        <p v-if="message?.createdAt" class="">{{ formatChatTime(message.createdAt.toDate()) }}</p>
       </div>
     </div>
   </RouterLink>

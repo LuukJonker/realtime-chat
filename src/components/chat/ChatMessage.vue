@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Message } from '@/types/database'
 import auth from '@/firebase/auth'
+import { formatTime } from '@/utils/formatTime';
 
 const currentUser = auth.currentUser
 
@@ -9,16 +10,6 @@ const props = defineProps<{
   index: number
   allMessages: Message[]
 }>()
-
-const formatTime = (date: Date) => {
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-
-  const hoursString = hours < 10 ? `0${hours}` : `${hours}`
-  const minutesString = minutes < 10 ? `0${minutes}` : `${minutes}`
-
-  return `${hoursString}:${minutesString}`
-}
 
 const checkIfFarApart = (index: number) => {
   if (index === props.allMessages.length - 1) return false

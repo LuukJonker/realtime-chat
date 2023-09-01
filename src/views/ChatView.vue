@@ -6,7 +6,8 @@ import UserSection from '@/components/UserSection.vue'
 import ChatMain from '@/components/chat/ChatMain.vue'
 
 defineProps<{
-  chatId: string | undefined
+  newGroup?: boolean
+  chatId?: string
 }>()
 
 const user = auth.currentUser as User
@@ -25,7 +26,11 @@ const user = auth.currentUser as User
 
       <UserSection />
     </section>
+    <div v-if="newGroup">
+      <h1>New group</h1>
+    </div>
     <ChatMain
+      v-else
       :chatId="chatId"
       :class="{
         'hidden md:flex': !chatId,

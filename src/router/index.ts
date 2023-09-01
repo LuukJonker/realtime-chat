@@ -29,6 +29,14 @@ const router = createRouter({
       component: RegisterView
     },
     {
+      path: '/new/group',
+      name: 'new-group',
+      component: HomeView,
+      props: {
+        newGroup: true
+      }
+    },
+    {
       path: '/:chatId',
       name: 'chat',
       props: true,

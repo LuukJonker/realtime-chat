@@ -56,18 +56,20 @@ const nonContactsUsers = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 mx-2 mt-4">
-    <h2 class="text-lg text-onDark emphasis-high">Chats</h2>
-    <ChatCard v-for="chat in searchedChats" :key="chat.id" :chat="chat" />
-    <div v-if="!searchedChats.length" class="flex-1 flex justify-center items-center">
-      <p class="text-2xl">No chats found</p>
+  <div>
+    <div class="flex flex-col gap-2 mx-2 mt-4">
+      <h2 class="text-lg text-onDark emphasis-high">Chats</h2>
+      <ChatCard v-for="chat in searchedChats" :key="chat.id" :chat="chat" />
+      <div v-if="!searchedChats.length" class="flex-1 flex justify-center items-center">
+        <p class="text-2xl">No chats found</p>
+      </div>
     </div>
-  </div>
-  <div class="flex flex-col gap-2 mx-2 mt-4">
-    <h2 class="text-lg text-onDark emphasis-high">Users</h2>
-    <UserCard v-for="user in nonContactsUsers" :key="user.id" :user="user" />
-    <div v-if="!nonContactsUsers.length" class="flex-1 flex justify-center items-center">
-      <p class="text-2xl">No users found</p>
+    <div class="flex flex-col gap-2 mx-2 mt-4">
+      <h2 class="text-lg text-onDark emphasis-high">Users</h2>
+      <UserCard v-for="user in nonContactsUsers" :key="user.id" :user="user" />
+      <div v-if="!nonContactsUsers.length" class="flex-1 flex justify-center items-center">
+        <p class="text-2xl">No users found</p>
+      </div>
     </div>
   </div>
 </template>
