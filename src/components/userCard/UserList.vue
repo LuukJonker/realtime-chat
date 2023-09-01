@@ -21,7 +21,6 @@ const { users } = storeToRefs(usersStore)
 const { chats } = storeToRefs(chatsStore)
 
 const searchedUsers = computed(() => {
-  console.log('running searchedUsers')
   const search = props.search.toLowerCase()
   return users.value.filter((user) => {
     return user.displayName.toLowerCase().includes(search)
@@ -29,7 +28,6 @@ const searchedUsers = computed(() => {
 })
 
 const contactsUsers = computed(() => {
-  console.log('running contactsUsers', searchedUsers.value)
   return searchedUsers.value.filter((user) => {
     return contacts.has(user.id)
   })
@@ -47,7 +45,6 @@ const searchedChats = computed(() => {
 })
 
 const nonContactsUsers = computed(() => {
-  console.log('running nonContactsUsers')
   return searchedUsers.value.filter((user) => {
     if (user.id === auth.currentUser?.uid) return false
     return !contacts.has(user.id)
