@@ -126,6 +126,7 @@ export const sendMessage = async (chatId: string, content: string) => {
 
 export const subscribeOnUsers = (callback: (users: User[]) => void) => {
   const coll = collection(db, 'users')
+
   const unsubscribe = onSnapshot(coll, (querySnapshot) => {
     const users = querySnapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() }

@@ -44,12 +44,12 @@ const message = computed(() => {
       class="w-16 aspect-square rounded-full object-cover"
       referrerpolicy="no-referrer"
     />
-    <div class="flex flex-col gap-[2px] max-w-full w-full">
+    <div class="flex flex-col gap-[2px] flex-grow min-w-0">
       <h2 class="text-lg text-onDark">{{ comp.displayName }}</h2>
-      <div class="flex w-full max-w-full items-center justify-between">
+      <div class="flex flex-grow items-center justify-between">
         <p
           v-if="message"
-          class="text-onDark emphasis-high whitespace-nowrap overflow-ellipsis overflow-hidden"
+          class="text-onDark min-w-0 flex-grow emphasis-high whitespace-nowrap overflow-ellipsis overflow-hidden"
         >
           {{ message.content }}
         </p>

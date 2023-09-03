@@ -32,7 +32,12 @@ export const useChatsStore = defineStore('chats', () => {
   }
 
   subscribeOnChats(({ chats: c, source: chatSource }) => {
-    chats.value = c
+    chats.value = c.map((chat) => {
+      return {
+        ...chats.value.find((c) => c.id === chat.id),
+        ...chat,
+      }
+    })
 
     if (chatSource === 'local') {
       return

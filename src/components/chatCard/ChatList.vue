@@ -12,7 +12,10 @@ const sortedChats = computed(() => sortChats(chats.value))
 </script>
 
 <template>
-  <div v-if="chats.length" class="flex-1 flex flex-col gap-4 mx-2 mt-4">
+  <div
+    v-if="chats.length"
+    class="flex flex-col gap-4 ml-2 pr-2 mt-4 overflow-y-auto overflow-x-hidden"
+  >
     <ChatCard v-for="chat in sortedChats" :key="chat.id" :chat="chat" />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UserList from '@/components/userCard/UserList.vue'
-import ChatList from '@/components/contactCard/ChatList.vue'
+import ChatList from '@/components/chatCard/ChatList.vue'
 import { ref } from 'vue'
 
 const search = ref('')
@@ -8,7 +8,7 @@ const search = ref('')
 
 <template>
   <div class="flex flex-col flex-1 justify-between overflow-hidden">
-    <div>
+    <div class="flex-grow min-h-0 flex flex-col">
       <input
         v-model="search"
         type="text"
